@@ -39,3 +39,53 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Test and Coverage
+coverage/
+*.lcov
+.nyc_output/
+test-results/
+*.html
+
+# Vitest
+.vitest/
+vitest.config.*.timestamp-*
+
+# Bundle analysis
+.next/analyze/
+.next/cache/
+stats.json
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+logs/
+*.log
+loglevel-debug.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+drizzle/*.sql
+
+# Build artifacts
+dist/
+build/
+out/
