@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -44,7 +44,7 @@ export function Navbar({ user }: NavbarProps) {
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              {navigation.map((item) => (
+              {navigation.map(item => (
                 <Link
                   key={item.name}
                   href={item.href}
@@ -89,7 +89,10 @@ export function Navbar({ user }: NavbarProps) {
             {/* User Menu (keeping as backup) */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
                   <User className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -141,7 +144,7 @@ export function Navbar({ user }: NavbarProps) {
       {mobileMenuOpen && (
         <div className="sm:hidden">
           <div className="space-y-1 pb-3 pt-2">
-            {navigation.map((item) => (
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 href={item.href}

@@ -16,10 +16,9 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar user={session.user} />
-      <main className="container mx-auto px-4 py-6">
-        {children}
-      </main>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <Navbar user={(session as any).user} />
+      <main className="container mx-auto px-4 py-6">{children}</main>
     </div>
   );
 }

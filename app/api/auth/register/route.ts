@@ -57,20 +57,19 @@ export async function POST(request: NextRequest) {
     await db.insert(categories).values(defaultCategories);
 
     return NextResponse.json(
-      { 
+      {
         message: "User created successfully",
         user: {
           id: newUser.id,
           name: newUser.name,
           email: newUser.email,
-        }
+        },
       },
       { status: 201 }
     );
-
   } catch (error) {
     console.error("Registration error:", error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: "Invalid input data", errors: error.errors },

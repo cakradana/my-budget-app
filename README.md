@@ -33,22 +33,26 @@ A fullstack budget tracking application built with Next.js 15, Tailwind CSS, and
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd my-budget-app
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Start PostgreSQL with Docker:
+
 ```bash
 # Start PostgreSQL database
 docker compose up -d postgres
@@ -58,6 +62,7 @@ docker compose --profile pgadmin up -d
 ```
 
 5. Set up the database:
+
 ```bash
 # Generate migration files
 npm run db:generate
@@ -70,6 +75,7 @@ npm run db:seed
 ```
 
 6. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -88,6 +94,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ### Sample Data
 
 The seed script creates:
+
 - Demo user (demo@example.com / demo123)
 - Default categories (Makan, Transportasi, Kost/Sewa, etc.)
 - Sample transactions for current month
@@ -96,19 +103,23 @@ The seed script creates:
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/[...nextauth]` - NextAuth.js endpoints
 
 ### Transactions
+
 - `GET /api/transactions` - List transactions with pagination
 - `POST /api/transactions` - Create new transaction
 - `PUT /api/transactions/[id]` - Update transaction
 - `DELETE /api/transactions/[id]` - Delete transaction
 
 ### Categories
+
 - `GET /api/categories` - List categories
 - `POST /api/categories` - Create category
 
 ### Budgets
+
 - `GET /api/budgets` - List budgets
 - `POST /api/budgets` - Create/update budget
 

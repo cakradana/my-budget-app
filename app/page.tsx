@@ -2,7 +2,13 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth/config";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export default async function Home() {
@@ -19,11 +25,11 @@ export default async function Home() {
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold mb-4">💰 Budget Tracker</h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Take control of your finances with our easy-to-use budget tracking application. 
-            Monitor income, expenses, and reach your savings goals.
+            Take control of your finances with our easy-to-use budget tracking
+            application. Monitor income, expenses, and reach your savings goals.
           </p>
         </div>
-        
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-10">
           <Card>
             <CardHeader>
@@ -32,11 +38,12 @@ export default async function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Keep track of your income and expenses to maintain a healthy balance and achieve your financial goals.
+                Keep track of your income and expenses to maintain a healthy
+                balance and achieve your financial goals.
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle>📈 Manage Budgets</CardTitle>
@@ -44,11 +51,12 @@ export default async function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Create monthly and weekly budgets for different categories to control your spending effectively.
+                Create monthly and weekly budgets for different categories to
+                control your spending effectively.
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle>� View Reports</CardTitle>
@@ -56,22 +64,25 @@ export default async function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Get insights into your financial habits with detailed reports and interactive charts.
+                Get insights into your financial habits with detailed reports
+                and interactive charts.
               </p>
             </CardContent>
           </Card>
         </div>
-        
+
         <div className="text-center space-y-4">
           <div className="space-x-4">
             <Link href="/auth/signin">
               <Button size="lg">Sign In</Button>
             </Link>
             <Link href="/auth/signup">
-              <Button variant="outline" size="lg">Create Account</Button>
+              <Button variant="outline" size="lg">
+                Create Account
+              </Button>
             </Link>
           </div>
-          
+
           <div className="text-sm text-muted-foreground">
             <p className="font-medium mb-2">Try the demo account:</p>
             <p>Email: demo@example.com</p>

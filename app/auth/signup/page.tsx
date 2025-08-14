@@ -9,7 +9,13 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const signUpSchema = z
   .object({
@@ -18,7 +24,7 @@ const signUpSchema = z
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
@@ -65,7 +71,8 @@ export default function SignUpPage() {
         const errorData = await response.json();
         setError(errorData.message || "Registration failed");
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("Registration error:", err);
       setError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -80,7 +87,8 @@ export default function SignUpPage() {
             <div className="text-green-600 text-4xl mb-4">✅</div>
             <h2 className="text-2xl font-bold mb-2">Account Created!</h2>
             <p className="text-muted-foreground">
-              Your account has been created successfully. Redirecting to sign in...
+              Your account has been created successfully. Redirecting to sign
+              in...
             </p>
           </CardContent>
         </Card>
@@ -92,7 +100,9 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">
+            Create Account
+          </CardTitle>
           <CardDescription className="text-center">
             Enter your information to create your budget tracker account
           </CardDescription>
@@ -109,7 +119,9 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.name && (
-                <p className="text-sm text-destructive">{errors.name.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
@@ -123,7 +135,9 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -137,7 +151,9 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -151,12 +167,16 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.confirmPassword && (
-                <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.confirmPassword.message}
+                </p>
               )}
             </div>
 
             {error && (
-              <div className="text-sm text-destructive text-center">{error}</div>
+              <div className="text-sm text-destructive text-center">
+                {error}
+              </div>
             )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>

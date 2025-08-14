@@ -1,0 +1,197 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { formatCurrency, formatDate } from "@/lib/utils";
+import { EditTransactionDialog } from "./edit-transaction-dialog";
+import { DeleteTransactionDialog } from "./delete-transaction-dialog";
+import { Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+
+interface Transaction {
+  id: string;
+  amount: number;
+  date: string;
+  note: string | null;
+  createdAt: Date;
+  categoryId: string | null;
+  categoryName: string | null;
+  categoryType: string | null;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  type: string;
+}
+
+interface TransactionListProps {
+  transactions: Transaction[];
+  categories: Category[];
+  currentPage: number;
+  totalPages: number;
+  searchParams: {
+    search?: string;
+    category?: string;
+    type?: "income" | "expense";
+    startDate?: string;
+    endDate?: string;
+    page?: string;
+  };
+}
+
+export function TransactionList({
+  transactions,
+  categories,
+  currentPage,
+  totalPages,
+  searchParams,
+}: TransactionListProps) {
+  const router = useRouter();
+  const [editingTransaction, setEditingTransaction] =
+    useState<Transaction | null>(null);
+  const [deletingTransaction, setDeletingTransaction] =
+    useState<Transaction | null>(null);
+
+  const buildPageUrl = (page: number) => {
+    const params = new URLSearchParams();
+
+    Object.entries(searchParams).forEach(([key, value]) => {
+      if (value && key !== "page") {
+        params.set(key, value);
+      }
+    });
+
+    if (page > 1) {
+      params.set("page", page.toString());
+    }
+
+    const queryString = params.toString();
+    return queryString
+      ? `/dashboard/transactions?${queryString}`
+      : "/dashboard/transactions";
+  };
+
+  if (transactions.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-muted-foreground">No transactions found</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Try adjusting your filters or add a new transaction
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Transactions */}
+      <div className="space-y-2">
+        {transactions.map(transaction => (
+          <div
+            key={transaction.id}
+            className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900"
+          >
+            <div className="flex-1">
+              <div className="flex items-center space-x-3">
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    transaction.amount > 0 ? "bg-green-500" : "bg-red-500"
+                  }`}
+                />
+                <div>
+                  <p className="font-medium">
+                    {transaction.categoryName || "Uncategorized"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {formatDate(transaction.date)} • {transaction.note}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <div
+                className={`text-right font-medium ${
+                  transaction.amount > 0 ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {transaction.amount > 0 ? "+" : ""}
+                {formatCurrency(transaction.amount)}
+              </div>
+
+              <div className="flex space-x-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setEditingTransaction(transaction)}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setDeletingTransaction(transaction)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </p>
+
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push(buildPageUrl(currentPage - 1))}
+              disabled={currentPage <= 1}
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Previous
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push(buildPageUrl(currentPage + 1))}
+              disabled={currentPage >= totalPages}
+            >
+              Next
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Dialog */}
+      {editingTransaction && (
+        <EditTransactionDialog
+          transaction={editingTransaction}
+          categories={categories}
+          open={!!editingTransaction}
+          onOpenChange={(open: boolean) => !open && setEditingTransaction(null)}
+        />
+      )}
+
+      {/* Delete Dialog */}
+      {deletingTransaction && (
+        <DeleteTransactionDialog
+          transaction={deletingTransaction}
+          open={!!deletingTransaction}
+          onOpenChange={(open: boolean) =>
+            !open && setDeletingTransaction(null)
+          }
+        />
+      )}
+    </div>
+  );
+}

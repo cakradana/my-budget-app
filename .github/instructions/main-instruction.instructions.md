@@ -1,6 +1,7 @@
 ---
-applyTo: '**'
+applyTo: "**"
 ---
+
 # CLAUDE.local.md — Expert Prompt Version (Next.js 15 + Tailwind 3 + Seed Data)
 
 Anda adalah asisten pengembang yang sangat mahir dalam **Next.js 15, Tailwind CSS v3, ShadCN UI, PostgreSQL, dan Drizzle ORM**.  
@@ -10,12 +11,14 @@ Gunakan **TypeScript strict mode**, clean code, dan hindari `any` kecuali dijela
 ---
 
 ## 1. Tujuan Aplikasi
+
 Aplikasi ini membantu pengguna mencatat pemasukan dan pengeluaran secara manual (tanpa fitur recurring)  
 dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/mingguan.
 
 ---
 
 ## 2. Stack & Tools
+
 - Next.js 15 App Router + TypeScript (strict mode)
 - Tailwind CSS v3 + ShadCN UI
 - PostgreSQL + Drizzle ORM
@@ -27,6 +30,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 ---
 
 ## 3. Fitur Wajib
+
 - Autentikasi login/register
 - Dashboard: ringkasan saldo, progress tabungan, quick-add transaksi
 - CRUD transaksi, kategori, budget
@@ -38,7 +42,9 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 ---
 
 ## 4. Database Schema
+
 **users**
+
 - id: UUID (PK)
 - name: text
 - email: text (unique)
@@ -46,6 +52,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 - created_at: timestamptz (default now)
 
 **categories**
+
 - id: UUID (PK)
 - name: text
 - type: enum('weekly', 'monthly', 'other')
@@ -53,6 +60,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 - created_at: timestamptz (default now)
 
 **transactions**
+
 - id: UUID (PK)
 - user_id: UUID (FK → users.id)
 - category_id: UUID (FK → categories.id)
@@ -63,6 +71,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 - INDEX: (user_id), (date), (category_id)
 
 **budgets**
+
 - id: UUID (PK)
 - user_id: UUID (FK → users.id)
 - category_id: UUID (FK → categories.id)
@@ -73,6 +82,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 ---
 
 ## 5. Teknis Implementasi
+
 - Middleware untuk protected routes
 - API RESTful dengan validasi Zod di backend
 - Pagination pada endpoint GET /transactions
@@ -88,6 +98,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 ## 6. Seed Data (contoh global + pola mingguan & bulanan)
 
 **categories**
+
 - "Makan" (type: weekly)
 - "Transportasi" (type: weekly)
 - "Kost/Sewa" (type: monthly)
@@ -96,6 +107,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 - "Hiburan" (type: other)
 
 **transactions** (contoh awal)
+
 - **Pola Mingguan** (mirip gaji mingguan 500rb, bayar sewa & keluarga di akhir bulan):
   - income: 500000 setiap Senin minggu 1–4
   - expense: "Makan" 150000 setiap minggu
@@ -112,6 +124,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
   - expense: "Hiburan" 300000 di pertengahan bulan
 
 **budgets**
+
 - Makan: weekly, 150000
 - Transportasi: weekly, 50000
 - Kost/Sewa: monthly, 1500000
@@ -122,7 +135,9 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 ---
 
 ## 7. Output Format yang Diminta
+
 Berikan output final dalam format berikut:
+
 1. **package.json snippet** (dependencies + devDependencies)
 2. **Struktur folder & file lengkap**
 3. **Isi semua file penting** (path + isi file)
