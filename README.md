@@ -1,36 +1,185 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Budget Tracker
+
+A fullstack budget tracking application built with Next.js 15, Tailwind CSS, and PostgreSQL.
+
+## Features
+
+- 📊 **Dashboard** - Overview of balance, income, and expenses
+- 💰 **Transaction Management** - Add, edit, and delete income/expense records
+- 📈 **Budget Planning** - Set and track monthly/weekly budgets
+- 📱 **Responsive Design** - Works on desktop and mobile
+- 🌙 **Dark Mode** - Toggle between light and dark themes
+- 🔐 **Authentication** - Secure login with email/password and Google OAuth
+- 📊 **Reports** - Visual charts and data export
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS v3, ShadCN UI
+- **Backend**: Next.js API Routes, Drizzle ORM
+- **Database**: PostgreSQL
+- **Authentication**: NextAuth.js
+- **State Management**: React Query (TanStack Query)
+- **Forms**: React Hook Form + Zod validation
+- **Charts**: Recharts
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ and npm
+- Docker and Docker Compose (for PostgreSQL)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd my-budget-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Start PostgreSQL with Docker:
+```bash
+# Start PostgreSQL database
+docker compose up -d postgres
 
-## Learn More
+# Optional: Start with pgAdmin for database management
+docker compose --profile pgadmin up -d
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. Set up the database:
+```bash
+# Generate migration files
+npm run db:generate
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Run migrations
+npm run db:migrate
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Seed with sample data
+npm run db:seed
+```
 
-## Deploy on Vercel
+6. Start the development server:
+```bash
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Database Schema
+
+### Tables
+
+- **users** - User accounts with authentication
+- **categories** - Income/expense categories (weekly, monthly, other)
+- **transactions** - Financial transactions with amounts and dates
+- **budgets** - Budget allocations per category and period
+
+### Sample Data
+
+The seed script creates:
+- Demo user (demo@example.com / demo123)
+- Default categories (Makan, Transportasi, Kost/Sewa, etc.)
+- Sample transactions for current month
+- Budget allocations
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/[...nextauth]` - NextAuth.js endpoints
+
+### Transactions
+- `GET /api/transactions` - List transactions with pagination
+- `POST /api/transactions` - Create new transaction
+- `PUT /api/transactions/[id]` - Update transaction
+- `DELETE /api/transactions/[id]` - Delete transaction
+
+### Categories
+- `GET /api/categories` - List categories
+- `POST /api/categories` - Create category
+
+### Budgets
+- `GET /api/budgets` - List budgets
+- `POST /api/budgets` - Create/update budget
+
+## Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run db:generate` - Generate Drizzle migrations
+- `npm run db:migrate` - Run migrations
+- `npm run db:push` - Push schema changes
+- `npm run db:studio` - Open Drizzle Studio
+- `npm run db:seed` - Seed database with sample data
+- `npm test` - Run tests
+
+## Docker Commands
+
+- `docker compose up -d postgres` - Start PostgreSQL database
+- `docker compose --profile pgadmin up -d` - Start with pgAdmin
+- `docker compose down` - Stop all services
+- `docker compose logs postgres` - View database logs
+- `docker compose exec postgres psql -U postgres -d budget_tracker` - Connect to database
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Connect your repository to Vercel
+2. Set environment variables in Vercel dashboard
+3. Deploy automatically on git push
+
+### Environment Variables
+
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/budget_tracker"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key-here"
+GOOGLE_CLIENT_ID="your-google-client-id" # Optional
+GOOGLE_CLIENT_SECRET="your-google-client-secret" # Optional
+```
+
+## Project Structure
+
+```
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   ├── auth/              # Authentication pages
+│   ├── dashboard/         # Main app pages
+│   └── layout.tsx         # Root layout
+├── src/
+│   ├── components/        # React components
+│   │   ├── ui/           # Base UI components
+│   │   └── ...           # Feature components
+│   ├── lib/
+│   │   ├── db/           # Database config and schema
+│   │   ├── auth/         # Authentication config
+│   │   └── utils/        # Utility functions
+│   └── types/            # TypeScript type definitions
+├── drizzle/              # Database migrations
+└── public/               # Static assets
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new features
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
