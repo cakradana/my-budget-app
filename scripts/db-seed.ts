@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import "dotenv/config";
-import { eq, isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 import { db } from "../src/lib/db/index";
 import { budgets, categories, transactions, users } from "../src/lib/db/schema";
@@ -40,48 +40,29 @@ async function seed() {
       .from(categories)
       .where(eq(categories.userId, user.id));
 
-    if (existingUserCategories.length > 0) {
-      console.log("ℹ️ User categories already exist, skipping seed");
-      return;
-    }
+    // Skip creating global categories - we only want user-specific ones
+    // This section is removed to prevent duplicate categories
 
-    // Check if global categories exist
-    const existingGlobalCategories = await db
-      .select()
-      .from(categories)
-      .where(isNull(categories.userId));
+    // Create user-specific categories only if they don't exist
+    let userCategories = existingUserCategories;
 
-    if (existingGlobalCategories.length === 0) {
-      // Create default categories (global - no userId)
-      await db.insert(categories).values([
-        { name: "Makan", type: "weekly", userId: null },
-        { name: "Transportasi", type: "weekly", userId: null },
-        { name: "Kost/Sewa", type: "monthly", userId: null },
-        { name: "Keluarga", type: "monthly", userId: null },
-        { name: "Tabungan", type: "monthly", userId: null },
-        { name: "Hiburan", type: "other", userId: null },
-        { name: "Gaji", type: "monthly", userId: null },
-      ]);
-      console.log("✅ Created default categories");
+    if (userCategories.length === 0) {
+      userCategories = await db
+        .insert(categories)
+        .values([
+          { name: "Makan", type: "weekly", userId: user.id },
+          { name: "Transportasi", type: "weekly", userId: user.id },
+          { name: "Kost/Sewa", type: "monthly", userId: user.id },
+          { name: "Keluarga", type: "monthly", userId: user.id },
+          { name: "Tabungan", type: "monthly", userId: user.id },
+          { name: "Hiburan", type: "other", userId: user.id },
+          { name: "Gaji", type: "monthly", userId: user.id },
+        ])
+        .returning();
+      console.log("✅ Created user categories");
     } else {
-      console.log("ℹ️ Default categories already exist");
+      console.log("ℹ️ User categories already exist, using existing");
     }
-
-    // Create user-specific categories (copies of defaults)
-    const userCategories = await db
-      .insert(categories)
-      .values([
-        { name: "Makan", type: "weekly", userId: user.id },
-        { name: "Transportasi", type: "weekly", userId: user.id },
-        { name: "Kost/Sewa", type: "monthly", userId: user.id },
-        { name: "Keluarga", type: "monthly", userId: user.id },
-        { name: "Tabungan", type: "monthly", userId: user.id },
-        { name: "Hiburan", type: "other", userId: user.id },
-        { name: "Gaji", type: "monthly", userId: user.id },
-      ])
-      .returning();
-
-    console.log("✅ Created user categories");
 
     // Find categories by name for easier reference
     const makanCat = userCategories.find(c => c.name === "Makan")!;
@@ -93,6 +74,20 @@ async function seed() {
     const tabunganCat = userCategories.find(c => c.name === "Tabungan")!;
     const hiburanCat = userCategories.find(c => c.name === "Hiburan")!;
     const gajiCat = userCategories.find(c => c.name === "Gaji")!;
+
+    // Check if transactions already exist for this user
+    const existingTransactions = await db
+      .select()
+      .from(transactions)
+      .where(eq(transactions.userId, user.id))
+      .limit(1);
+
+    if (existingTransactions.length > 0) {
+      console.log(
+        "ℹ️ Transactions already exist for user, skipping sample data"
+      );
+      return;
+    }
 
     // Create sample transactions for current month (August 2025)
     // Pattern: Monthly income (7M at beginning of month)
@@ -195,6 +190,18 @@ async function seed() {
 
     await db.insert(transactions).values(sampleTransactions);
     console.log("✅ Created sample transactions");
+
+    // Check if budgets already exist for this user
+    const existingBudgets = await db
+      .select()
+      .from(budgets)
+      .where(eq(budgets.userId, user.id))
+      .limit(1);
+
+    if (existingBudgets.length > 0) {
+      console.log("ℹ️ Budgets already exist for user, skipping");
+      return;
+    }
 
     // Create budgets
     const sampleBudgets = [
