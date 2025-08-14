@@ -91,7 +91,7 @@ dengan dashboard yang menampilkan saldo, progress tabungan, dan laporan bulanan/
 - Script migrasi Drizzle + seed
 - Error handling konsisten
 - Connection pooling untuk deploy di Vercel
-- Minimal 5 unit test (Vitest/Jest) untuk kalkulasi & API
+- Minimal 5 unit test (Vitest) untuk kalkulasi & API
 
 ---
 

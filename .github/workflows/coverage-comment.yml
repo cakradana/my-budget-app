@@ -1,0 +1,65 @@
+name: Coverage Comment
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
+      
+      - name: Read coverage summary
+        id: coverage
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+            echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+          else
+            echo "coverage=N/A" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Comment PR with coverage
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const coverage = '${{ steps.coverage.outputs.coverage }}';
+            const body = `## 📊 Test Coverage Report
+            
+            **Overall Coverage**: ${coverage}%
+            
+            | Type | Coverage |
+            |------|----------|
+            | Lines | ${coverage}% |
+            | Statements | Check artifacts |
+            | Functions | Check artifacts |
+            | Branches | Check artifacts |
+            
+            View full report in the [Actions artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            // Find the PR
+            const { data: pulls } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: context.payload.workflow_run.head_branch
+            });
+            
+            if (pulls.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pulls[0].number,
+                body: body
+              });
+            }

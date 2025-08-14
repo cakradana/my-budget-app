@@ -1,5 +1,9 @@
 # Budget Tracker
 
+[![CI](https://github.com/rcakradana/my-budget-app/actions/workflows/ci.yml/badge.svg)](https://github.com/rcakradana/my-budget-app/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/rcakradana/my-budget-app/branch/main/graph/badge.svg)](https://codecov.io/gh/rcakradana/my-budget-app)
+[![Test Coverage](https://img.shields.io/badge/coverage-70%25-yellow)](./coverage/index.html)
+
 A fullstack budget tracking application built with Next.js 15, Tailwind CSS, and PostgreSQL.
 
 ## Features
@@ -22,6 +26,8 @@ A fullstack budget tracking application built with Next.js 15, Tailwind CSS, and
 - **State Management**: React Query (TanStack Query)
 - **Forms**: React Hook Form + Zod validation
 - **Charts**: Recharts
+- **Testing**: Vitest + React Testing Library + Coverage (v8)
+- **CI/CD**: GitHub Actions + Codecov
 
 ## Getting Started
 
@@ -143,6 +149,21 @@ The seed script creates:
 - `npm run check:fix` - Fix all auto-fixable issues
 - `npm run validate` - Full validation (lint, format, type-check, tests)
 
+### 📊 Performance & Security
+
+- `npm run analyze` - Analyze bundle size
+- `npm run analyze:server` - Analyze server bundle
+- `npm run analyze:browser` - Analyze browser bundle
+- `npm run audit` - Security audit (moderate level)
+- `npm run audit:fix` - Auto-fix security issues
+- `npm run deps:check` - Check for dependency updates
+- `npm run deps:update` - Update all dependencies
+
+### 🚀 CI/CD
+
+- `npm run ci` - Run CI pipeline locally (validate + build)
+- `npm run preflight` - Pre-deployment checks
+
 ### 🗄️ Database
 
 - `npm run db:generate` - Generate migrations from schema
@@ -155,10 +176,10 @@ The seed script creates:
 
 ### 🧪 Testing
 
-- `npm run test` - Run tests in watch mode
+- `npm run test` - Run tests in watch mode (Vitest)
 - `npm run test:run` - Run tests once
-- `npm run test:ui` - Open Vitest UI
-- `npm run test:coverage` - Generate coverage report
+- `npm run test:ui` - Open Vitest UI for interactive testing
+- `npm run test:coverage` - Generate coverage report (70% threshold)
 
 ## Development Workflow
 
@@ -252,13 +273,126 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret" # Optional
 └── public/               # Static assets
 ```
 
+## Testing
+
+The project uses Vitest for unit and integration testing with React Testing Library for component testing.
+
+### Running Tests
+
+```bash
+# Run tests in watch mode
+npm run test
+
+# Run tests once (CI mode)
+npm run test:run
+
+# Generate coverage report
+npm run test:coverage
+
+# Open interactive UI
+npm run test:ui
+```
+
+### Coverage Requirements
+
+The project maintains a minimum of 70% code coverage:
+
+- Lines: 70%
+- Functions: 70%
+- Branches: 70%
+- Statements: 70%
+
+Coverage reports are automatically generated and uploaded to Codecov during CI.
+
+## CI/CD Pipeline
+
+The project uses GitHub Actions for continuous integration:
+
+### Workflow Jobs
+
+1. **Lint and Type Check** - Code quality checks
+2. **Test** - Unit tests with PostgreSQL service
+3. **Build** - Production build verification
+4. **Security** - Dependency vulnerability scanning
+
+### Pre-commit Hooks
+
+Husky is configured to run checks before commits:
+
+- Linting
+- Formatting
+- Type checking
+
+To bypass hooks in emergency: `git commit --no-verify`
+
+## Performance Optimization
+
+### Bundle Analysis
+
+```bash
+# Analyze overall bundle
+npm run analyze
+
+# Analyze server bundle only
+npm run analyze:server
+
+# Analyze client bundle only
+npm run analyze:browser
+```
+
+### Next.js Optimizations
+
+- Turbopack for faster development builds
+- Image optimization with next/image
+- Font optimization with next/font
+- Automatic code splitting
+- API route caching
+- Static generation where possible
+
+## Security
+
+### Regular Audits
+
+```bash
+# Check for vulnerabilities
+npm run audit
+
+# Auto-fix vulnerabilities
+npm run audit:fix
+
+# Check for outdated dependencies
+npm run deps:check
+```
+
+### Best Practices
+
+- Environment variables for secrets
+- NEXTAUTH_SECRET for session encryption
+- SQL injection prevention with Drizzle ORM
+- XSS protection with React
+- CSRF protection with NextAuth
+- Rate limiting on API routes (TODO)
+
+## Error Handling
+
+The application implements comprehensive error handling:
+
+- Custom error classes in `src/lib/errors.ts`
+- Standardized API responses in `src/lib/api-response.ts`
+- Global error boundaries
+- Detailed logging in development
+- User-friendly messages in production
+
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
-4. Add tests for new features
-5. Submit a pull request
+4. Add tests for new features (maintain 70% coverage)
+5. Run validation (`npm run validate`)
+6. Commit your changes (hooks will auto-format)
+7. Push to your branch
+8. Submit a pull request
 
 ## License
 

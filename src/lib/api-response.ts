@@ -235,11 +235,12 @@ export function getPaginationParams(url: URL): {
   limit: number;
   offset: number;
 } {
-  const page = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10));
-  const limit = Math.min(
-    100,
-    Math.max(1, parseInt(url.searchParams.get("limit") || "10", 10))
-  );
+  const pageParam = parseInt(url.searchParams.get("page") || "1", 10);
+  const page = Math.max(1, isNaN(pageParam) ? 1 : pageParam);
+
+  const limitParam = parseInt(url.searchParams.get("limit") || "10", 10);
+  const limit = Math.min(100, Math.max(1, isNaN(limitParam) ? 10 : limitParam));
+
   const offset = (page - 1) * limit;
 
   return { page, limit, offset };
