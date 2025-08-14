@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
+import { AlertTriangle, Loader2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,9 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
-import { Loader2, AlertTriangle } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -72,8 +75,8 @@ export function DeleteTransactionDialog({
         </DialogHeader>
 
         <div className="py-4">
-          <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-            <div className="flex justify-between items-start">
+          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+            <div className="flex items-start justify-between">
               <div>
                 <p className="font-medium">
                   {transaction.categoryName || "Uncategorized"}
@@ -82,7 +85,7 @@ export function DeleteTransactionDialog({
                   {transaction.date}
                 </p>
                 {transaction.note && (
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {transaction.note}
                   </p>
                 )}

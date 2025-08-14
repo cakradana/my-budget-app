@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
+import { Filter, Search, X } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,8 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Filter, X } from "lucide-react";
 
 interface Category {
   id: string;
@@ -102,7 +105,7 @@ export function TransactionFilters({
               onClick={clearFilters}
               className="ml-auto"
             >
-              <X className="h-4 w-4 mr-1" />
+              <X className="mr-1 h-4 w-4" />
               Clear
             </Button>
           )}
@@ -114,7 +117,7 @@ export function TransactionFilters({
           <div className="space-y-2">
             <Label htmlFor="search">Search</Label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
               <Input
                 id="search"
                 placeholder="Search transactions..."

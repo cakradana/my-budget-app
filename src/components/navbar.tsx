@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+
+import Link from "next/link";
+
+import { LogOut, Menu, Moon, Sun, User, X } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
-import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Moon, Sun, User, LogOut, Menu, X } from "lucide-react";
 
 interface NavbarProps {
   user: {
@@ -56,7 +59,7 @@ export function Navbar({ user }: NavbarProps) {
             </div>
           </div>
 
-          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+          <div className="hidden space-x-4 sm:ml-6 sm:flex sm:items-center">
             {/* Theme Toggle */}
             <Button
               variant="ghost"

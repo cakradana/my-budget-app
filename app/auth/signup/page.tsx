@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -16,6 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const signUpSchema = z
   .object({
@@ -81,11 +84,11 @@ export default function SignUpPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
-            <div className="text-green-600 text-4xl mb-4">✅</div>
-            <h2 className="text-2xl font-bold mb-2">Account Created!</h2>
+            <div className="mb-4 text-4xl text-green-600">✅</div>
+            <h2 className="mb-2 text-2xl font-bold">Account Created!</h2>
             <p className="text-muted-foreground">
               Your account has been created successfully. Redirecting to sign
               in...
@@ -97,10 +100,10 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
+          <CardTitle className="text-center text-2xl font-bold">
             Create Account
           </CardTitle>
           <CardDescription className="text-center">
@@ -174,7 +177,7 @@ export default function SignUpPage() {
             </div>
 
             {error && (
-              <div className="text-sm text-destructive text-center">
+              <div className="text-center text-sm text-destructive">
                 {error}
               </div>
             )}

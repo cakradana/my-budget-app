@@ -1,7 +1,9 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth/config";
-import { redirect } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { getServerSession } from "next-auth/next";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { authOptions } from "@/lib/auth/config";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -22,15 +24,15 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto py-10">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold mb-4">💰 Budget Tracker</h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+        <div className="mb-10 text-center">
+          <h1 className="mb-4 text-4xl font-bold">💰 Budget Tracker</h1>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             Take control of your finances with our easy-to-use budget tracking
             application. Monitor income, expenses, and reach your savings goals.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-10">
+        <div className="mb-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader>
               <CardTitle>💰 Track Balance</CardTitle>
@@ -71,7 +73,7 @@ export default async function Home() {
           </Card>
         </div>
 
-        <div className="text-center space-y-4">
+        <div className="space-y-4 text-center">
           <div className="space-x-4">
             <Link href="/auth/signin">
               <Button size="lg">Sign In</Button>
@@ -84,7 +86,7 @@ export default async function Home() {
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <p className="font-medium mb-2">Try the demo account:</p>
+            <p className="mb-2 font-medium">Try the demo account:</p>
             <p>Email: demo@example.com</p>
             <p>Password: demo123</p>
           </div>

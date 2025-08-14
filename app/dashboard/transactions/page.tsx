@@ -1,12 +1,11 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth/config";
-import { db } from "@/lib/db";
-import { transactions, categories } from "@/lib/db/schema";
-import { eq, desc, gte, lte, and, sql, or, isNull } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { TransactionList } from "@/components/transactions/transaction-list";
-import { TransactionFilters } from "@/components/transactions/transaction-filters";
+
+import { and, desc, eq, gte, isNull, lte, or, sql } from "drizzle-orm";
+import { getServerSession } from "next-auth/next";
+
 import { AddTransactionDialog } from "@/components/transactions/add-transaction-dialog";
+import { TransactionFilters } from "@/components/transactions/transaction-filters";
+import { TransactionList } from "@/components/transactions/transaction-list";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { authOptions } from "@/lib/auth/config";
+import { db } from "@/lib/db";
+import { categories, transactions } from "@/lib/db/schema";
 
 interface PageProps {
   searchParams: Promise<{

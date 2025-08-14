@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
+import { ChevronLeft, ChevronRight, Edit, Trash2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { EditTransactionDialog } from "./edit-transaction-dialog";
+
 import { DeleteTransactionDialog } from "./delete-transaction-dialog";
-import { Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { EditTransactionDialog } from "./edit-transaction-dialog";
 
 interface Transaction {
   id: string;
@@ -74,9 +78,9 @@ export function TransactionList({
 
   if (transactions.length === 0) {
     return (
-      <div className="text-center py-8">
+      <div className="py-8 text-center">
         <p className="text-muted-foreground">No transactions found</p>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="mt-1 text-sm text-muted-foreground">
           Try adjusting your filters or add a new transaction
         </p>
       </div>
@@ -90,12 +94,12 @@ export function TransactionList({
         {transactions.map(transaction => (
           <div
             key={transaction.id}
-            className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900"
+            className="flex items-center justify-between rounded-lg border p-4 hover:bg-gray-50 dark:hover:bg-gray-900"
           >
             <div className="flex-1">
               <div className="flex items-center space-x-3">
                 <div
-                  className={`w-3 h-3 rounded-full ${
+                  className={`h-3 w-3 rounded-full ${
                     transaction.amount > 0 ? "bg-green-500" : "bg-red-500"
                   }`}
                 />
@@ -155,7 +159,7 @@ export function TransactionList({
               onClick={() => router.push(buildPageUrl(currentPage - 1))}
               disabled={currentPage <= 1}
             >
-              <ChevronLeft className="h-4 w-4 mr-1" />
+              <ChevronLeft className="mr-1 h-4 w-4" />
               Previous
             </Button>
 
@@ -166,7 +170,7 @@ export function TransactionList({
               disabled={currentPage >= totalPages}
             >
               Next
-              <ChevronRight className="h-4 w-4 ml-1" />
+              <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
         </div>

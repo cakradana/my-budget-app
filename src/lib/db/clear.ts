@@ -1,7 +1,8 @@
 import "dotenv/config";
-import { db } from "./index";
-import { users, categories, transactions, budgets } from "./schema";
 import { eq } from "drizzle-orm";
+
+import { db } from "./index";
+import { budgets, categories, transactions, users } from "./schema";
 
 async function clearDemoData() {
   console.log("🧹 Starting demo data cleanup...");

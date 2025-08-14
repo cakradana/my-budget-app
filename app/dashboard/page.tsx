@@ -1,8 +1,6 @@
+import { and, eq, gte, lte, sql } from "drizzle-orm";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth/config";
-import { db } from "@/lib/db";
-import { transactions, categories, budgets } from "@/lib/db/schema";
-import { gte, lte, eq, and, sql } from "drizzle-orm";
+
 import {
   Card,
   CardContent,
@@ -10,6 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { authOptions } from "@/lib/auth/config";
+import { db } from "@/lib/db";
+import { budgets, categories, transactions } from "@/lib/db/schema";
 import { formatCurrency, getCurrentMonthRange } from "@/lib/utils";
 
 export default async function DashboardPage() {
@@ -180,7 +181,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {recentTransactions.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">
+                <p className="py-4 text-center text-muted-foreground">
                   No transactions yet. Start by adding your first transaction!
                 </p>
               ) : (
@@ -221,7 +222,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {budgetSummary.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">
+                <p className="py-4 text-center text-muted-foreground">
                   No budgets set. Create your first budget to track spending!
                 </p>
               ) : (
@@ -243,7 +244,7 @@ export default async function DashboardPage() {
                           {formatCurrency(budgetAmount)}
                         </span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="h-2 w-full rounded-full bg-gray-200">
                         <div
                           className={`h-2 rounded-full ${isOverBudget ? "bg-red-500" : "bg-blue-500"}`}
                           style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -252,7 +253,7 @@ export default async function DashboardPage() {
                       <div className="text-xs text-muted-foreground">
                         {percentage.toFixed(1)}% used
                         {isOverBudget && (
-                          <span className="text-red-500 ml-2">
+                          <span className="ml-2 text-red-500">
                             Over budget!
                           </span>
                         )}
