@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import "dotenv/config";
 import { eq, isNull } from "drizzle-orm";
 
-import { db } from "./index";
-import { budgets, categories, transactions, users } from "./schema";
+import { db } from "../src/lib/db/index";
+import { budgets, categories, transactions, users } from "../src/lib/db/schema";
 
 async function seed() {
   console.log("🌱 Starting seed process...");

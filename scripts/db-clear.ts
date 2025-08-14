@@ -1,7 +1,7 @@
 import "dotenv/config";
 
-import { db } from "./index";
-import { budgets, categories, transactions, users } from "./schema";
+import { db } from "../src/lib/db/index";
+import { budgets, categories, transactions, users } from "../src/lib/db/schema";
 
 async function clearAllData() {
   console.log("🧹 Starting complete database cleanup...");
