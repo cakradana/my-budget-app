@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import "dotenv/config";
-import { eq } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 
 import { db } from "./index";
 import { budgets, categories, transactions, users } from "./schema";
@@ -34,30 +34,38 @@ async function seed() {
       console.log("✅ Created demo user");
     }
 
-    // Check if default categories exist
-    const existingCategories = await db
+    // Check if user-specific categories exist
+    const existingUserCategories = await db
       .select()
       .from(categories)
-      .where(eq(categories.userId, user.id))
-      .limit(1);
+      .where(eq(categories.userId, user.id));
 
-    if (existingCategories.length > 0) {
-      console.log("ℹ️ Demo data already exists, skipping seed");
+    if (existingUserCategories.length > 0) {
+      console.log("ℹ️ User categories already exist, skipping seed");
       return;
     }
 
-    // Create default categories (global - no userId)
-    await db.insert(categories).values([
-      { name: "Makan", type: "weekly", userId: null },
-      { name: "Transportasi", type: "weekly", userId: null },
-      { name: "Kost/Sewa", type: "monthly", userId: null },
-      { name: "Keluarga", type: "monthly", userId: null },
-      { name: "Tabungan", type: "monthly", userId: null },
-      { name: "Hiburan", type: "other", userId: null },
-      { name: "Gaji", type: "monthly", userId: null },
-    ]);
+    // Check if global categories exist
+    const existingGlobalCategories = await db
+      .select()
+      .from(categories)
+      .where(isNull(categories.userId));
 
-    console.log("✅ Created default categories");
+    if (existingGlobalCategories.length === 0) {
+      // Create default categories (global - no userId)
+      await db.insert(categories).values([
+        { name: "Makan", type: "weekly", userId: null },
+        { name: "Transportasi", type: "weekly", userId: null },
+        { name: "Kost/Sewa", type: "monthly", userId: null },
+        { name: "Keluarga", type: "monthly", userId: null },
+        { name: "Tabungan", type: "monthly", userId: null },
+        { name: "Hiburan", type: "other", userId: null },
+        { name: "Gaji", type: "monthly", userId: null },
+      ]);
+      console.log("✅ Created default categories");
+    } else {
+      console.log("ℹ️ Default categories already exist");
+    }
 
     // Create user-specific categories (copies of defaults)
     const userCategories = await db

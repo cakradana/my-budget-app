@@ -1,41 +1,26 @@
 import "dotenv/config";
-import { eq } from "drizzle-orm";
 
 import { db } from "./index";
 import { budgets, categories, transactions, users } from "./schema";
 
-async function clearDemoData() {
-  console.log("🧹 Starting demo data cleanup...");
+async function clearAllData() {
+  console.log("🧹 Starting complete database cleanup...");
 
   try {
-    // Find demo user
-    const demoUser = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, "demo@example.com"))
-      .limit(1);
-
-    if (demoUser.length === 0) {
-      console.log("ℹ️ No demo user found, nothing to clear");
-      return;
-    }
-
-    const userId = demoUser[0].id;
-
     // Delete in order (to respect foreign key constraints)
-    console.log("🗑️ Deleting user budgets...");
-    await db.delete(budgets).where(eq(budgets.userId, userId));
+    console.log("🗑️ Deleting all budgets...");
+    await db.delete(budgets);
 
-    console.log("🗑️ Deleting user transactions...");
-    await db.delete(transactions).where(eq(transactions.userId, userId));
+    console.log("🗑️ Deleting all transactions...");
+    await db.delete(transactions);
 
-    console.log("🗑️ Deleting user categories...");
-    await db.delete(categories).where(eq(categories.userId, userId));
+    console.log("🗑️ Deleting all categories...");
+    await db.delete(categories);
 
-    console.log("🗑️ Deleting demo user...");
-    await db.delete(users).where(eq(users.id, userId));
+    console.log("🗑️ Deleting all users...");
+    await db.delete(users);
 
-    console.log("✅ Demo data cleared successfully!");
+    console.log("✅ All data cleared successfully!");
   } catch (error) {
     console.error("❌ Clear failed:", error);
     process.exit(1);
@@ -44,4 +29,4 @@ async function clearDemoData() {
   process.exit(0);
 }
 
-clearDemoData();
+clearAllData();

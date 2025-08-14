@@ -125,16 +125,85 @@ The seed script creates:
 
 ## Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
+### 🚀 Development
+
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production (with type checking)
 - `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run db:generate` - Generate Drizzle migrations
-- `npm run db:migrate` - Run migrations
-- `npm run db:push` - Push schema changes
-- `npm run db:studio` - Open Drizzle Studio
+- `npm run clean` - Clean build artifacts
+
+### ✨ Code Quality
+
+- `npm run lint` - Check linting issues
+- `npm run lint:fix` - Auto-fix linting issues
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
+- `npm run type-check` - TypeScript type checking
+- `npm run check` - Run all checks in parallel (lint, format, type-check)
+- `npm run check:fix` - Fix all auto-fixable issues
+- `npm run validate` - Full validation (lint, format, type-check, tests)
+
+### 🗄️ Database
+
+- `npm run db:generate` - Generate migrations from schema
+- `npm run db:migrate` - Run database migrations
+- `npm run db:push` - Push schema changes to database
+- `npm run db:studio` - Open Drizzle Studio (visual database editor)
 - `npm run db:seed` - Seed database with sample data
-- `npm test` - Run tests
+- `npm run db:clear` - Clear all data from database
+- `npm run db:reset` - Clear and reseed database
+
+### 🧪 Testing
+
+- `npm run test` - Run tests in watch mode
+- `npm run test:run` - Run tests once
+- `npm run test:ui` - Open Vitest UI
+- `npm run test:coverage` - Generate coverage report
+
+## Development Workflow
+
+### Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Setup database
+npm run db:push
+npm run db:seed
+
+# Start development
+npm run dev
+```
+
+### Daily Development
+
+```bash
+# Morning - Start your environment
+npm run dev          # Start dev server (http://localhost:3000)
+npm run db:studio    # Open database UI (optional)
+
+# While coding - Check your work
+npm run check        # Run all quality checks
+npm run test         # Run tests in watch mode
+
+# Before committing - Validate everything
+npm run validate     # Full validation suite
+# Note: Pre-commit hooks automatically lint and format your code
+```
+
+### Common Tasks
+
+```bash
+# Fresh database start
+npm run db:reset
+
+# Fix all code issues
+npm run check:fix
+
+# Build for production
+npm run build
+```
 
 ## Docker Commands
 
