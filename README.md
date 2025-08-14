@@ -147,7 +147,8 @@ The seed script creates:
 - `npm run type-check` - TypeScript type checking
 - `npm run check` - Run all checks in parallel (lint, format, type-check)
 - `npm run check:fix` - Fix all auto-fixable issues
-- `npm run validate` - Full validation (lint, format, type-check, tests)
+- `npm run validate` - Full validation (checks + tests) - use in CI/CD
+- `npm run validate:fix` - Auto-fix issues then validate - use locally
 
 ### 📊 Performance & Security
 

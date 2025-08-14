@@ -27,18 +27,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Run linting
-        run: npm run lint
-      
-      - name: Check formatting
-        run: npm run format:check
-      
-      - name: Type check
-        run: npm run type-check
+      # Note: Using 'check' not 'check:fix' - CI should fail on issues, not auto-fix
+      - name: Run all checks (lint, format, type-check)
+        run: npm run check
 
   test:
     name: Test
     runs-on: ubuntu-latest
+    
+    # Run tests even if linting fails (to get full feedback)
+    # Remove this if you want tests to be skipped on lint failures
+    if: always()
     
     services:
       postgres:
@@ -168,3 +167,27 @@ jobs:
       - name: Check for dependency updates
         run: npm run deps:check
         continue-on-error: true
+
+  # Optional job that demonstrates full validation
+  # This is redundant with the above jobs but shows the validate command
+  validate:
+    name: Full Validation (Alternative)
+    runs-on: ubuntu-latest
+    if: false  # Disabled by default - enable if you prefer single job
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      # Note: Using 'validate' not 'validate:fix' in CI
+      - name: Run full validation
+        run: npm run validate

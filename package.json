@@ -15,6 +15,7 @@
     "check": "npm-run-all --parallel lint format:check type-check",
     "check:fix": "npm-run-all --sequential lint:fix format",
     "validate": "npm-run-all check test:run",
+    "validate:fix": "npm-run-all check:fix test:run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",

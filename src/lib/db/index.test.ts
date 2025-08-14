@@ -1,20 +1,52 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Mock postgres module
-vi.mock("postgres", () => {
-  const mockSql = vi.fn(() => Promise.resolve([{ "?column?": 1 }])) as unknown;
-  (mockSql as { end: unknown }).end = vi.fn(() => Promise.resolve());
-  return {
-    default: vi.fn(() => mockSql),
+// Mock functions that will be controlled per test
+let mockSqlBehavior = {
+  shouldFail: false,
+  failOnEnd: false,
+};
+
+// Create mock SQL client that behaves like a tagged template function
+const createMockClient = () => {
+  // The actual postgres client is called as a tagged template literal
+  const client = (strings: TemplateStringsArray) => {
+    const query = strings[0]; // Get the SQL query string
+
+    if (mockSqlBehavior.shouldFail) {
+      return Promise.reject(new Error("Connection failed"));
+    }
+
+    // Mock SELECT 1 query for health check
+    if (query && query.includes("SELECT 1")) {
+      return Promise.resolve([{ "?column?": 1 }]);
+    }
+
+    return Promise.resolve([]);
   };
-});
+
+  // Add the end method
+  client.end = vi.fn(() => {
+    if (mockSqlBehavior.failOnEnd) {
+      return Promise.reject(new Error("Close failed"));
+    }
+    return Promise.resolve();
+  });
+
+  return client;
+};
+
+let mockClient = createMockClient();
+
+// Mock postgres module
+vi.mock("postgres", () => ({
+  default: vi.fn(() => mockClient),
+}));
 
 // Mock drizzle-orm
 vi.mock("drizzle-orm/postgres-js", () => ({
   drizzle: vi.fn((client, config) => ({
     client,
     config,
-    // Add any other methods your db instance needs
   })),
 }));
 
@@ -35,6 +67,13 @@ describe("Database Connection", () => {
     processExitSpy = vi
       .spyOn(process, "exit")
       .mockImplementation(() => undefined as never);
+
+    // Reset mock behavior
+    mockSqlBehavior = {
+      shouldFail: false,
+      failOnEnd: false,
+    };
+    mockClient = createMockClient();
 
     // Clear module cache
     vi.resetModules();
@@ -88,6 +127,7 @@ describe("Database Connection", () => {
   describe("checkDatabaseConnection", () => {
     it("should return true when connection is successful", async () => {
       process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
+      mockSqlBehavior.shouldFail = false;
 
       const { checkDatabaseConnection } = await import("./index");
       const result = await checkDatabaseConnection();
@@ -98,17 +138,9 @@ describe("Database Connection", () => {
     it("should return false and log error when connection fails", async () => {
       process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 
-      // Mock postgres to throw error
-      vi.resetModules();
-      vi.mock("postgres", () => {
-        const mockSql = vi.fn(() =>
-          Promise.reject(new Error("Connection failed"))
-        ) as unknown;
-        (mockSql as { end: unknown }).end = vi.fn(() => Promise.resolve());
-        return {
-          default: vi.fn(() => mockSql),
-        };
-      });
+      // Set mock to fail
+      mockSqlBehavior.shouldFail = true;
+      mockClient = createMockClient();
 
       const { checkDatabaseConnection } = await import("./index");
       const result = await checkDatabaseConnection();
@@ -124,6 +156,8 @@ describe("Database Connection", () => {
   describe("closeDatabaseConnection", () => {
     it("should close connection successfully", async () => {
       process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
+      mockSqlBehavior.failOnEnd = false;
+      mockClient = createMockClient();
 
       const { closeDatabaseConnection } = await import("./index");
       await closeDatabaseConnection();
@@ -136,19 +170,9 @@ describe("Database Connection", () => {
     it("should handle close connection errors", async () => {
       process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 
-      // Mock postgres to throw error on end()
-      vi.resetModules();
-      vi.mock("postgres", () => {
-        const mockSql = vi.fn(() =>
-          Promise.resolve([{ "?column?": 1 }])
-        ) as unknown;
-        (mockSql as { end: unknown }).end = vi.fn(() =>
-          Promise.reject(new Error("Close failed"))
-        );
-        return {
-          default: vi.fn(() => mockSql),
-        };
-      });
+      // Set mock to fail on end()
+      mockSqlBehavior.failOnEnd = true;
+      mockClient = createMockClient();
 
       const { closeDatabaseConnection } = await import("./index");
       await closeDatabaseConnection();
