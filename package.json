@@ -26,7 +26,16 @@
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "analyze": "ANALYZE=true next build",
+    "analyze:server": "BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser next build",
+    "audit": "npm audit --audit-level=moderate",
+    "audit:fix": "npm audit fix",
+    "deps:check": "npx npm-check-updates",
+    "deps:update": "npx npm-check-updates -u && npm install",
+    "ci": "npm run validate && npm run build",
+    "preflight": "npm-run-all --parallel type-check lint test:run --sequential build"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.6.0",
@@ -64,6 +73,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.4.6",
     "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
